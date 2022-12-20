@@ -7,13 +7,12 @@ run() {
 help() {
     echo
     echo "Usage: sh ./tf-app.sh {run|tensorboard}" >&2
-    echo "   run                        Run the main python script in an appropriate environment."
+    echo "   run                Run the main python script in an appropriate environment."
     echo
 
     exit 0
 }
 
-basecmd=ml-app
 cmd=${0##*/}
 subcmd=
 
