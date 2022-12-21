@@ -14,7 +14,7 @@ create_env() {
     conda activate tf_app
 
     pip install --upgrade pip
-    pip install flake8
+    pip install flake8 pyyaml h5py
 }
 
 activate_env() {
