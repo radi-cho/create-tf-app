@@ -28,11 +28,7 @@ run() {
 
 lint() {
     activate_env
-    if [ ! -z "$@" ]; then
-        flake8 $@
-    else
-        flake8 main.py
-    fi
+    flake8 $@
 }
 
 help() {
