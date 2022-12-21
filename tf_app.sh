@@ -10,21 +10,37 @@ create_env() {
         * ) echo "Skipping tensorflow-gpu setup.";;
     esac
 
-    conda create --name tf_app python=3.9 $tf_package pylint
+    conda create --name tf_app python=3.9 $tf_package
     conda activate tf_app
+
     pip install --upgrade pip
+    pip install flake8
+}
+
+activate_env() {
+    conda activate tf_app
 }
 
 run() {
-    conda activate tf_app
+    activate_env
     python3 main.py "$@"
+}
+
+lint() {
+    activate_env
+    if [ ! -z "$@" ]; then
+        flake8 $@
+    else
+        flake8 main.py
+    fi
 }
 
 help() {
     echo
-    echo "Usage: sh ./tf_app.sh {create_env|run}" >&2
-    echo "   create_env         Create a Conda environment (named tf_app by default) and install necessary packages."
-    echo "   run                Run the main Python script in the appropriate environment."
+    echo "Usage: sh ./tf_app.sh {create_env|run|lint}" >&2
+    echo "    create_env         Create a Conda environment (named tf_app by default) and install necessary packages."
+    echo "    run                Run the main Python script in the appropriate environment."
+    echo "    lint               Run flake8 linting. Checks main.py by default, but other filenames could be provided."
     echo
 
     exit 0
@@ -48,6 +64,8 @@ case $subcmd in
         create_env;;
     run )
         run "$@";;
+    lint )
+        lint "$@";;
     * )
         printf 'Invalid action "%s"\n' "$subcmd" >&2
         exit 1;;
