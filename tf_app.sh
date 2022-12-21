@@ -35,8 +35,8 @@ help() {
     echo
     echo "Usage: sh ./tf_app.sh {create_env|run|lint}" >&2
     echo "    create_env         Create a Conda environment (named tf_app by default) and install necessary packages."
-    echo "    run                Run the main Python script in the appropriate environment."
-    echo "    lint               Run flake8 linting. Checks main.py by default, but other filenames could be provided."
+    echo "    run                Run main.py in the appropriate environment and pass any arguments to it."
+    echo "    lint               Run flake8 linting for all .py files unless specific filenames are be provided."
     echo
 
     exit 0
