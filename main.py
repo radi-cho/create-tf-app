@@ -1,3 +1,4 @@
+import datetime
 import tensorflow as tf
 
 from tensorflow.keras.layers import Dense, Flatten, Conv2D
@@ -42,12 +43,19 @@ model = MyModel()
 loss_object = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 optimizer = tf.keras.optimizers.Adam()
 
-# Metrics to acumulate during training
+# Specify metrics to acumulate during training
 train_loss = tf.keras.metrics.Mean(name='train_loss')
 train_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(name='train_accuracy')
 
 test_loss = tf.keras.metrics.Mean(name='test_loss')
 test_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(name='test_accuracy')
+
+# Set up log writers
+current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+train_log_dir = 'logs/' + current_time + '/train'
+test_log_dir = 'logs/' + current_time + '/test'
+train_summary_writer = tf.summary.create_file_writer(train_log_dir)
+test_summary_writer = tf.summary.create_file_writer(test_log_dir)
 
 
 # Train and evaluate
@@ -88,8 +96,16 @@ for epoch in range(EPOCHS):
   for images, labels in train_ds:
     train_step(images, labels)
 
+  with train_summary_writer.as_default():
+    tf.summary.scalar('loss', train_loss.result(), step=epoch)
+    tf.summary.scalar('accuracy', train_accuracy.result(), step=epoch)
+
   for test_images, test_labels in test_ds:
     test_step(test_images, test_labels)
+
+  with test_summary_writer.as_default():
+    tf.summary.scalar('loss', test_loss.result(), step=epoch)
+    tf.summary.scalar('accuracy', test_accuracy.result(), step=epoch)
 
   print(
     f'Epoch {epoch + 1}, '

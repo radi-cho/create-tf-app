@@ -31,12 +31,18 @@ lint() {
     flake8 $@
 }
 
+run_tensorboard() {
+    activate_env
+    tensorboard --logdir=logs/ "$@"
+}
+
 help() {
     echo
-    echo "Usage: sh ./tf_app.sh {create_env|run|lint}" >&2
+    echo "Usage: sh ./tf_app.sh {create_env|run|lint|run_tensorboard}" >&2
     echo "    create_env         Create a Conda environment (named tf_app by default) and install necessary packages."
     echo "    run                Run main.py in the appropriate environment and pass any arguments to it."
     echo "    lint               Run flake8 linting for all .py files unless specific filenames are be provided."
+    echo "    run_tensorboard    Run Tensorboard to visualize records in the ./logs directory."
     echo
 
     exit 0
@@ -62,6 +68,8 @@ case $subcmd in
         run "$@";;
     lint )
         lint "$@";;
+    run_tensorboard )
+        run_tensorboard "$@";;
     * )
         printf 'Invalid action "%s"\n' "$subcmd" >&2
         exit 1;;
