@@ -18,4 +18,10 @@ sh ./tf_app.sh {create_env|run|lint|run_tensorboard}
 - `lint` - Run [flake8](https://pypi.org/project/flake8/) linting for all `.py` files unless specific filenames are be provided.
 - `run_tensorboard` - Run [Tensorboard](https://tensorboard.dev/) to visualize records in the ./logs directory.
 
+You can use an environment variable - `TF_APP_ENV_NAME` - to create multiple projects or set a specific name.
+
+```sh
+TF_APP_ENV_NAME=tf_app2 sh ./tf_app.sh {create_env|run|lint|run_tensorboard}
+```
+
 If you need to edit your environment or execute specific commands in it, you can always enter it with `conda activate tf_app`.

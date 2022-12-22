@@ -1,6 +1,11 @@
 #!/bin/sh
 eval "$(command conda 'shell.bash' 'hook' 2> /dev/null)"
 
+env_name=tf_app
+if [ ! -z "${TF_APP_ENV_NAME}" ]; then
+  env_name="${TF_APP_ENV_NAME}"
+fi
+
 create_env() {
     tf_package="tensorflow"
     read -p "Set up GPU support packages for Tensorflow (y/[n])? " choice
@@ -10,15 +15,15 @@ create_env() {
         * ) echo "Skipping tensorflow-gpu setup.";;
     esac
 
-    conda create --name tf_app python=3.9 $tf_package
-    conda activate tf_app
+    conda create --name $env_name python=3.9 $tf_package
+    activate_env
 
     pip install --upgrade pip
     pip install flake8 pyyaml h5py
 }
 
 activate_env() {
-    conda activate tf_app
+    conda activate $env_name
 }
 
 run() {
