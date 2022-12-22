@@ -1,8 +1,19 @@
 import datetime
+import argparse
 import tensorflow as tf
 
 from tensorflow.keras.layers import Dense, Flatten, Conv2D
 from tensorflow.keras import Model
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--seed', type=int, default=42)
+parser.add_argument('--num_epochs', type=int, default=5)
+
+args = parser.parse_args()
+RANDOM_SEED = args.seed
+NUM_EPOCHS = args.num_epochs
+
+tf.random.set_seed(RANDOM_SEED)
 
 
 # Define a model
@@ -84,9 +95,7 @@ def test_step(images, labels):
   test_accuracy(labels, predictions)
 
 
-EPOCHS = 5
-
-for epoch in range(EPOCHS):
+for epoch in range(NUM_EPOCHS):
   # Reset the metrics at the start of the next epoch
   train_loss.reset_states()
   train_accuracy.reset_states()
@@ -115,4 +124,4 @@ for epoch in range(EPOCHS):
     f'Test Accuracy: {test_accuracy.result() * 100}'
   )
 
-  model.save_weights('./checkpoints/' + current_time + '/epoch' + epoch)
+  model.save_weights('./checkpoints/' + current_time + '/epoch' + str(epoch))
